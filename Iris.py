@@ -138,3 +138,20 @@ ax_petals = figure_petals.add_subplot(111)
 plt.boxplot(results_petals)
 ax_petals.set_xticklabels(names_petals)
 plt.show()
+
+from sklearn.model_selection import GridSearchCV
+model_params = {
+    'n_estimators': [50, 150, 250],
+    'max_features': ['sqrt', 0.25, 0.5, 0.75, 1.0],
+    'min_samples_split': [2, 4, 6]
+}
+rf_model = RandomForestClassifier(random_state=42)
+clf = GridSearchCV(rf_model, model_params, cv=5)
+model = clf.fit(X_petals,Y_petals)
+print(model.best_params_)
+
+predictions = model.predict(scaled_test_set_petals)
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(test_set_labels_petals, predictions)
+print("Accuracy: ", accuracy)
+
